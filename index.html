@@ -530,40 +530,7 @@ h1 {
             window.open(driveLink, '_blank');
         }
 
-        // فەنکشەنی گۆڕینی دۆخ
-        let currentTheme = 'default';
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-            if (currentTheme === 'default') {
-                body.className = 'dark-mode';
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'دۆخی ڕۆژ';
-                currentTheme = 'dark';
-            } else if (currentTheme === 'dark') {
-                body.className = 'light-mode';
-                themeIcon.textContent = '🎨';
-                themeText.textContent = 'ڕەنگی ئاسایی';
-                currentTheme = 'light';
-            } else {
-                body.className = '';
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'دۆخی شەو';
-                currentTheme = 'default';
-            }
-            // پاشەکەوتکردنی هەڵبژاردەکە
-            localStorage.setItem('theme', currentTheme);
-        }
-        // بارکردنی دۆخی پاشەکەوتکراو
-        window.addEventListener('load', function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme && savedTheme !== 'default') {
-                for (let i = 0; i < (savedTheme === 'dark' ? 1 : 2); i++) {
-                    toggleTheme();
-                }
-            }
-        });
+        
         // فەنکشەنی گەڕان
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
@@ -631,5 +598,80 @@ h1 {
             });
         });
     </script>
+
+    <script>
+
+        // فەنکشەنی گۆڕینی دۆخ
+        let currentTheme = 'default';
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            if (currentTheme === 'default') {
+                body.className = 'dark-mode';
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'دۆخی ڕۆژ';
+                currentTheme = 'dark';
+            } else if (currentTheme === 'dark') {
+                body.className = 'light-mode';
+                themeIcon.textContent = '🎨';
+                themeText.textContent = 'ڕەنگی ئاسایی';
+                currentTheme = 'light';
+            } else {
+                body.className = '';
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'دۆخی شەو';
+                currentTheme = 'default';
+            }
+            // پاشەکەوتکردنی هەڵبژاردەکە
+            localStorage.setItem('theme', currentTheme);
+        }
+        // بارکردنی دۆخی پاشەکەوتکراو
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme && savedTheme !== 'default') {
+                for (let i = 0; i < (savedTheme === 'dark' ? 1 : 2); i++) {
+                    toggleTheme();
+                }
+            }
+        });
+
+
+
+    </script>
+       
+       
+<!--
+       <script>
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+
+    // Change icon & text dynamically
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+
+    if (document.body.classList.contains('dark-mode')) {
+      themeIcon.textContent = '☀️';
+      themeText.textContent = 'دۆخی ڕۆژ'; // Day Mode
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeIcon.textContent = '🌙';
+      themeText.textContent = 'دۆخی شەو'; // Night Mode
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  // Load saved theme on page load
+  window.onload = function () {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeIcon').textContent = '☀️';
+      document.getElementById('themeText').textContent = 'دۆخی ڕۆژ';
+    }
+  }
+</script>
+-->
+
+
 </body>
 </html>
