@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کتێبخانەی کوردی</title>
+    <style>
+/* دۆخی شەو/ڕۆژ */
+:root {
+    --primary-gradient:radial-gradient(circle,rgba(74, 72, 72, 1) 0%, rgba(189, 189, 155, 1) 100%);
+    --text-primary: white;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-color: rgba(31, 38, 135, 0.37);
+}
+
+body.dark-mode {
+    --primary-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    --text-primary: #e0e0e0;
+    --text-secondary: rgba(224, 224, 224, 0.7);
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode {
+    --primary-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    --text-primary: #2d3436;
+    --text-secondary: rgba(45, 52, 54, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.9);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--primary-gradient);
+    min-height: 100vh;
+    direction: rtl;
+    transition: all 0.3s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 10px 20px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+    background: var(--glass-bg);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+h1 {
+    color: var(--text-primary);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.category {
+    margin-bottom: 50px;
+    background: var(--glass-bg);
+    border-radius: 15px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px var(--shadow-color);
+    border: 1px solid var(--glass-border);
+}
+
+.category h2 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.book-card {
+    background: var(--glass-bg);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+}
+
+.book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px var(--shadow-color);
+}
+
+.book-image {
+    width: 120px;
+    height: 160px;
+    border-radius: 10px;
+    margin: 0 auto 15px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+.book-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.book-title {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.book-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+.download-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.download-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(238, 90, 36, 0.4);
+}
+
+.search-container {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 30px;
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    font-size: 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+}
+
+.search-box::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-box:focus {
+    outline: none;
+    box-shadow: 0 0 20px var(--shadow-color);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .category {
+        padding: 20px;
+    }
+    .book-image {
+        width: 100px;
+        height: 130px;
+        font-size: 2.5rem;
+    }
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <!-- دوگمەی گۆڕینی دۆخ -->
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <span class="theme-icon" id="themeIcon">🌙</span>
+            <span id="themeText">دۆخی شەو</span>
+        </div>
+    </div>
+
+        <header>
+            <h1>📚 کتێبخانەی کوردی</h1>
+            <p class="subtitle">٢٠٠٠ کتئب کۆ بکەمەوە بە شیوەی pdf کتیبی ئەلیکترونی ئامادەکردنی لەلایەن . قوتابی ئیریڤان اکبر.کۆمەڵێکی بەرفراوان لە کتێبە کوردییەکان</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="گەڕان لە کتێبەکان..." id="searchInput">
+        </div>
+
+        <!-- بەشی بەرێوەبردنی خێزان -->
+        <div class="category" data-category="ئامۆژگاری">
+            <h2>📖 ئامۆژگاری و چیرۆک</h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="ئامۆژگاری خێزان" data-keywords="باس لەو زانیاریانە دەکات کە پیویستە تاکەکانی کۆمەڵگا فێری ببن لە بەرێوە بردنی خێزان">
+                    <div class="book-image">
+                        <img src="images/2344.jpg" alt=" ئامۆژگاری خێزان " onerror="this.style.display='none'; this.parentElement.innerHTML='📚';">
+                    </div>
+                    <div class="book-title"> ئامۆژگاری خێزان</div>
+                    <div class="book-description">باس لەو زانیاریانە دەکات کە پیویستە تاکەکانی کۆمەڵگا فێری ببن لەسەر بەرێوە بردنی خێزان</div>
+                    <a href="https://drive.google.com/drive/folders/1yQYD6gMFCuvA7Jqfm0OliEtb2sl25IMc" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1yQYD6gMFCuvA7Jqfm0OliEtb2sl25IMc')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title="چیرۆک" data-keywords="  پێک هاتوە لە چەن کتێبێکی چیرۆکی منداڵان،   ">
+                    <div class="book-image">
+                        <img src="images/1 (12).jpg" alt="چیرۆک" onerror="this.style.display='none'; this.parentElement.innerHTML='📘';">
+                    </div>
+                    <div class="book-title">چیرۆک</div>
+                    <div class="book-description">پێک هاتوە لە چەن کتێبێکی چیرۆکی منداڵان</div>
+                    <a href="https://drive.google.com/drive/folders/1ApfNjDySTypWvubfDMjpBFUTeu7SC56U" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1ApfNjDySTypWvubfDMjpBFUTeu7SC56U')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" کتێبی ئه دەبی" data-keywords="چەن کتێبێکی ئەدەبی تێدایە،احمدی خانی، ئۆشۆ،نالی، کوردی ، سالم ..هتد">
+                    <div class="book-image">
+                        <img src="images/1 (22).jpg" alt="کتێبی ئه دەبی" onerror="this.style.display='none'; this.parentElement.innerHTML='📗';">
+                    </div>
+                    <div class="book-title">کتێبی ئه دەبی </div>
+                    <div class="book-description">   چەن کتێبێکی ئەدەبی تێدایە،احمدی خانی، ئۆشۆ،نالی، کوردی ، سالم ..هتد</div>
+                    <a href="https://drive.google.com/drive/folders/1SvLsAZHkEIanym5iblSrVPmo1LXqc5lR" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1SvLsAZHkEIanym5iblSrVPmo1LXqc5lR')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+        <!-- بەشی پێغەمبەرانو سەحابەکان -->
+        <div class="category" data-category="پێغەمبەر">
+            <h2>🏛️ پێغەمبەر</h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="فەرمودەکانی پێغەمبەر" data-keywords="۲۰۰ فەرمودە بۆ ئافرەتان،فەرمودەهاوبەشەکانی بوخاریو موسلیم،بەهای فەرموودە،٤۰ فەرموودە بۆ منداڵان،زۆری تر">
+                    <div class="book-image">
+                        <img src="images/far.jpg" alt="فەرمودەکانی پێغەمبەر " onerror="this.style.display='none'; this.parentElement.innerHTML='📜';">
+                    </div>
+                    <div class="book-title"> فەرمودەکانی پێغەمبەر</div>
+                    <div class="book-description">۲۰۰ فەرمودە بۆ ئافرەتان،فەرمودەهاوبەشەکانی بوخاریو موسلیم،بەهای فەرموودە،٤۰ فەرموودە بۆ منداڵان،زۆری تر</div>
+                    <a href="https://drive.google.com/drive/folders/10gCoU90ij5meqjNdyXFrX7KRwiQLzC4V" class="download-btn" onclick="openBook('https://drive.google.com/file/d/YOUR_FILE_ID_HERE/view')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title="سنن سەحابەکان" data-keywords="سنن ابن خزیمە۱ تا۳،سنن ابن ماجە۱تا۳،سنن الترمزی ۱ تا٤، سنن الدارمی ۱ تا۲،سنن النسائی ۱ تا٤،سنەی ابوداود تا ٥ بەرگ  ">
+                    <div class="book-image">
+                        <img src="images/سنن.jpg" alt="سنن سەحابەکان " onerror="this.style.display='none'; this.parentElement.innerHTML='🏰';">
+                    </div>
+                    <div class="book-title">سنن سەحابەکان </div>
+                    <div class="book-description">    سنن ابن خزیمە۱ تا۳،سنن ابن ماجە۱تا۳،سنن الترمزی ۱ تا٤، سنن الدارمی ۱ تا۲،سنن النسائی ۱ تا٤،سنەی ابوداود تا ٥ بەرگ</div>
+                    <a href="https://drive.google.com/drive/folders/1KMLx0AdMBu0ubR2pHxwfw6rCfeYv1JZA" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1KMLx0AdMBu0ubR2pHxwfw6rCfeYv1JZA')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- بەشی زمان  -->
+        <div class="category" data-category="زمان">
+            <h2>🧠  زمانەکان </h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="زمانەکان " data-keywords="کتێبی زمانی ئەڵمانی، زمانی سویدی، زمانی جڵفەی عیراقی،زمانی انگلیزی   ">
+                    <div class="book-image">
+                        <img src="images/1 (15).jpg" alt=" زمانەکان" onerror="this.style.display='none'; this.parentElement.innerHTML='🤔';">
+                    </div>
+                    <div class="book-title">زمانەکان </div>
+                    <div class="book-description">   کتێبی زمانی ئەڵمانی، زمانی سویدی، زمانی جڵفەی عیراقی،زمانی انگلیزی </div>
+                    <a href="https://drive.google.com/drive/folders/12HsFpQnv0FMP6Ikhk-9NVrzI3lhKgUag" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/12HsFpQnv0FMP6Ikhk-9NVrzI3lhKgUag')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- بەشی زانست -->
+        <div class="category" data-category="زانست">
+            <h2>🔬 زانست و تەکنەلۆجیا</h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="زانستی کۆمپیوتەر " data-keywords="cشارپ،c+،html,python,network,php&mysql,...هتد">
+                    <div class="book-image">
+                        <img src="images/kom.png" alt="زانستی کۆمپیوتەر" onerror="this.style.display='none'; this.parentElement.innerHTML='⚛️';">
+                    </div>
+                    <div class="book-title"> زانستی کۆمپیوتەر</div>
+                    <div class="book-description"> cشارپ،c+،html,python,network,php&mysql,...هتد</div>
+                    <a href="https://drive.google.com/drive/folders/1LIWhrIu37NtZ6bWOc_NpVZsFSJaK6g1j" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1LIWhrIu37NtZ6bWOc_NpVZsFSJaK6g1j')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" زانستی دەرون ناسی " data-keywords="   حەوت خوی نەوجەوانان، ۲۱ هەنگاو بۆ سەرکەوتن،ئافرەتو ئەتەکێت،دوور لە نیگەرانی،ئامانجی ژیان،باوکی دەوڵەمەنیو هەژاری،ببەبەخۆت،بەرەوکامەرانی،بەبەتاڵی بمرە... هتد">
+                    <div class="book-image">
+                        <img src="images/1 (13).jpg" alt=" زانستی دەرون ناسی " onerror="this.style.display='none'; this.parentElement.innerHTML='💻';">
+                    </div>
+                    <div class="book-title"> زانستی دەرون ناسی </div>
+                    <div class="book-description">  حەوت خوی نەوجەوانان، ۲۱ هەنگاو بۆ سەرکەوتن،ئافرەتو ئەتەکێت،دوور لە نیگەرانی،ئامانجی ژیان،باوکی دەوڵەمەنیو هەژاری،ببەبەخۆت،بەرەوکامەرانی،بەبەتاڵی بمرە... هتد</div>
+                    <a href="https://drive.google.com/drive/folders/11ZA2HVRF_a-lut1zREw0EnpfGDo14Uqp" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11ZA2HVRF_a-lut1zREw0EnpfGDo14Uqp')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+        <!-- بەشی ئایین -->
+        <div class="category" data-category="ئایین">
+            <h2>🕌 ئایین و کەلتوور</h2>
+            <div class="books-grid">
+                <div class="book-card" data-title=" کتێبی ئاینی" data-keywords="دەربارەی نوێژ،باسی حەجو عمرە،ئیسلامو زانست،شەریعەت ٤ بەرگ،لەسەربەهەشە،ناسری سوبحانی ،مامۆستافاتح،ناسێنی هاوەڵان،مێژووی تەبەری ٨ بەرگ،کتێبی جۆراوجۆری دیکە...   ">
+                    <div class="book-image">
+                        <img src="images/1 (26).jpg" alt="کتێبی ئاینی " onerror="this.style.display='none'; this.parentElement.innerHTML='🕌';">
+                    </div>
+                    <div class="book-title"> کتێبی ئاینی</div>
+                    <div class="book-description">دەربارەی نوێژ،باسی حەجو عمرە،ئیسلامو زانست،شەریعەت ٤ بەرگ،لەسەربەهەشە،ناسری سوبحانی ،مامۆستافاتح،ناسێنی هاوەڵان،مێژووی تەبەری ٨ بەرگ،کتێبی جۆراوجۆری دیکە...</div>
+                    <a href="#" class="download-btn" onclick="openBook('https://drive.google.com/file/d/YOUR_FILE_ID_HERE/view')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- کتێبی زاناکان  -->
+        <div class="category" data-category="زاناکان">
+            <h2>کتێبی زاناکان </h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="مامۆستا کرێکار " data-keywords="   بنەماکانی دەوڵەت،حوکمی وەرگرتنی زانستی شەرعی،داری اسلامو داری کفر،نوری ڕێ،ڕوکنی اسلام،پەروەردەی دەروون،یادی بەدر،یەکتا پەرستی">
+                    <div class="book-image">
+                        <img src="images/1 (6).jpg" alt=" مامۆستا کرێکار" onerror="this.style.display='none'; this.parentElement.innerHTML='🧸';">
+                    </div>
+                    <div class="book-title"> مامۆستا کرێکار</div>
+                    <div class="book-description">بنەماکانی دەوڵەت،حوکمی وەرگرتنی زانستی شەرعی،داری اسلامو داری کفر،نوری ڕێ،ڕوکنی اسلام،پەروەردەی دەروون،یادی بەدر،یەکتا پەرستی</div>
+                    <a href="https://drive.google.com/drive/folders/11OqPIDBhTTyAksu5rrZKHejU2J7IK38v" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11OqPIDBhTTyAksu5rrZKHejU2J7IK38v')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" کتێبی مامۆستا ماکوان" data-keywords="   مەملەکەتی نوور تا بەرگی ٤،مەملەکەتی قوورئان،مەملەکەتی ئیشق،مەملەکەتی شەیتانتا بەرگی ٤،ڕێرەو،مەلیکی ئەشق،">
+                    <div class="book-image">
+                        <img src="images/3.jpg" alt=" کتێبی مامۆستا ماکوان" onerror="this.style.display='none'; this.parentElement.innerHTML='🔤';">
+                    </div>
+                    <div class="book-title"> کتێبی مامۆستا ماکوان</div>
+                    <div class="book-description">   مەملەکەتی نوور تا بەرگی ٤،مەملەکەتی قوورئان،مەملەکەتی ئیشق،مەملەکەتی شەیتانتا بەرگی ٤،ڕێرەو،مەلیکی ئەشق، </div>
+                    <a href="https://drive.google.com/drive/folders/11Q0UuFpF6aIXbcCA00dYKMvonVXUXrTQ" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11Q0UuFpF6aIXbcCA00dYKMvonVXUXrTQ')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+
+        <!--  بەشی پزیشکی -->
+        <div class="category" data-category="پزیشکی">
+            <h2>🗣️   کتێبی پزیشکی</h2>
+            <div class="books-grid">
+                <div class="book-card" data-title=" کتێبی پزیشکی" data-keywords=" پرسیارو وەڵامی پزیشکی ،زانستی پزیشکی، فەرهەنگی پزیشکی ،گێتی زیندەوەر،نەخۆشیەکان  ">
+                    <div class="book-image">
+                        <img src="images/1 (9).jpg" alt=" کتێبی پزیشکی" onerror="this.style.display='none'; this.parentElement.innerHTML='📙';">
+                    </div>
+                    <div class="book-title"> کتێبی پزیشکی</div>
+                    <div class="book-description">پرسیارو وەڵامی پزیشکی ،زانستی پزیشکی، فەرهەنگی پزیشکی ،گێتی زیندەوەر،نەخۆشیەکان</div>
+                    <a href="https://drive.google.com/drive/folders/11YIPzCq2lhjrQtH07ivU6TwV0maBMRCS" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11YIPzCq2lhjrQtH07ivU6TwV0maBMRCS')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" فەرهەنگی پزیشکی" data-keywords="۲۰۰ دەرمانو بەکار هێنان، فەرهەنگی دەرمان،نەخۆشی دڵ،فەرهەنگی پزیشکی  خوێنکار، فەرهەنگی پزیشکی دەوەن۱و۲، بنچینەکانی دەرمان ۱،۲،۳">
+                    <div class="book-image">
+                        <img src="images/1 (11).jpg" alt="فەرهەنگی پزیشکی " onerror="this.style.display='none'; this.parentElement.innerHTML='📝';">
+                    </div>
+                    <div class="book-title"> فەرهەنگی پزیشکی</div>
+                    <div class="book-description">۲۰۰ دەرمانو بەکار هێنان، فەرهەنگی دەرمان،نەخۆشی دڵ،فەرهەنگی پزیشکی  خوێنکار، فەرهەنگی پزیشکی دەوەن۱و۲، بنچینەکانی دەرمان ۱،۲،۳</div>
+                    <a href="https://drive.google.com/drive/folders/11nZIbYAwLQ0OaiNbi4PkieBlRRI8cmXM" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11nZIbYAwLQ0OaiNbi4PkieBlRRI8cmXM')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+        <!-- نەخۆشیەکانو دەرمان  -->
+        <div class="category" data-category="نەخۆشیەکن ">
+            <h2>جۆری نەخۆشیەکان   </h2>
+            <div class="books-grid">
+                <div class="book-card" data-title=" جۆری نەخۆشیەکان" data-keywords="نەخۆشی دڵ،ئایدز لەدەخولەک دا،بەرزی فشاری خوێن،پشت ئیشە،تەنگەنەفەسی،چۆن لاشەت لە زەهر پاک ئەکەیەوە،جینەکان،چارەسەر بە قەرسیلی گەنم ،٥۰۰ ڕەچەتەی پزیشکی،چارەسەر بەسیواک، چارەسەر بە گوڵوگیا،چارە بەئاو،چارەسەری سروشتی ئەژنۆو بڕبڕەی پشت،حیجامە،خواردنی دروست...هتد">
+                    <div class="book-image">
+                        <img src="images/1 (7).jpg" alt=" جۆری نەخۆشیەکان" onerror="this.style.display='none'; this.parentElement.innerHTML='🎨';">
+                    </div>
+                    <div class="book-title"> جۆری نەخۆشیەکان</div>
+                    <div class="book-description">نەخۆشی دڵ،ئایدز لەدەخولەک دا،بەرزی فشاری خوێن،پشت ئیشە،تەنگەنەفەسی،چۆن لاشەت لە زەهر پاک ئەکەیەوە،جینەکان،چارەسەر بە قەرسیلی گەنم ،٥۰۰ ڕەچەتەی پزیشکی،چارەسەر بەسیواک، چارەسەر بە گوڵوگیا،چارە بەئاو،چارەسەری سروشتی ئەژنۆو بڕبڕەی پشت،حیجامە،خواردنی دروست...هتد</div>
+                    <a href="https://drive.google.com/drive/folders/11kv3Z3qBmksYsO4wFhPfrKqQGYWNGC5J" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11kv3Z3qBmksYsO4wFhPfrKqQGYWNGC5J')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" پرسیارو وەڵامی پزیشکی" data-keywords="ئایا دەکرێ خوێن دروست بکرێ،پرسیارو وەڵامی پزیشکی، هتد">
+                    <div class="book-image">
+                        <img src="images/1 (5).jpg" alt="پرسیارو وەڵامی پزیشکی " onerror="this.style.display='none'; this.parentElement.innerHTML='🎵';">
+                    </div>
+                    <div class="book-title"> پرسیارو وەڵامی پزیشکی</div>
+                    <div class="book-description">ئایا دەکرێ خوێن دروست بکرێ،پرسیارو وەڵامی پزیشکی، هتد</div>
+                    <a href="https://drive.google.com/drive/folders/11_NU0YSPWXNwM_il3kl1WZ0EmUFjz6H8" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11_NU0YSPWXNwM_il3kl1WZ0EmUFjz6H8')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- بەشی سیاسەت -->
+        <div class="category" data-category="سیاسەت">
+            <h2>🏛️ سیاسەت و یاسا</h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="سیاسەتی کوردستان" data-keywords="سیاسەت، کوردستان، یاسا، حکومەت">
+                    <div class="book-image">
+                        <img src="images/syas.jpg" alt="سیاسەتی کوردستان" onerror="this.style.display='none'; this.parentElement.innerHTML='🏛️';">
+                    </div>
+                    <div class="book-title">سیاسەتی کوردستان</div>
+                    <div class="book-description">مێژوو و ئێستای سیاسەتی کوردستان</div>
+                    <a href="https://drive.google.com/drive/folders/1CW6e4rXkPfPgN_BHVumaTlZZ-k4HIWCq" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1CW6e4rXkPfPgN_BHVumaTlZZ-k4HIWCq')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+
+        <!--  بەشی مێژوو یاسا -->
+        <div class="category" data-category="یاسا">
+            <h2>🌱  بەشی مێژوو یاسا </h2>
+            <div class="books-grid">
+                <div class="book-card" data-title="یاسا " data-keywords="   جۆرەها کتێبی یاسایی ، یاسای باج ، یاسای خراپ بەکار هینانی موبایل ، تاوانو سزا">
+                    <div class="book-image">
+                        <img src="images/yasa.JPG" alt="یاسا " onerror="this.style.display='none'; this.parentElement.innerHTML='🌱';">
+                    </div>
+                    <div class="book-title"> یاسا</div>
+                    <div class="book-description">  جۆرەها کتێبی یاسایی ، یاسای باج ، یاسای خراپ بەکار هینانی موبایل ، تاوانو سزا  </div>
+                    <a href="https://drive.google.com/drive/folders/1M8OwS-loOj-u_xmpBOz_JyiTmq6TV_yi" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/1M8OwS-loOj-u_xmpBOz_JyiTmq6TV_yi')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" مێژوو داستان" data-keywords="کتێبی مێژوو ، مێژووی کور، مەغۆلەکان، داستانی چاخی بەردین">
+                    <div class="book-image">
+                        <img src="images/mezhw.jpg" alt=" مێژوو داستان" onerror="this.style.display='none'; this.parentElement.innerHTML='🏔️';">
+                    </div>
+                    <div class="book-title"> مێژوو داستان</div>
+                    <div class="book-description">    کتێبی مێژوو ، مێژووی کور، مەغۆلەکان، داستانی چاخی بەردین</div>
+                    <a href="https://drive.google.com/drive/folders/12kE7UgUyyNvJU7doWNksdItHPec1iZ-f" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/12kE7UgUyyNvJU7doWNksdItHPec1iZ-f')">دابەزاندن</a>
+                </div>
+            </div>
+        </div>
+        <!--  بەشی ڕۆمانوچیرۆک&فێرکاری کار -->
+        <div class="category" data-category="ڕۆمانو چیرۆک">
+            <h2>بەشی ڕۆمانوچیرۆک&فێرکاری کار   </h2>
+            <div class="books-grid">
+                <div class="book-card" data-title=" ڕۆمانو چیرۆک" data-keywords="حەمەدۆگ،سینۆهە، ژنە وەحشیەکان، هەزاروو یەک شەوە،سەدساڵ تەنیایی،ڕشتەی مرواری،شارلۆک هۆڵمز ، ڕۆمانی فارسی، پایزەبرا،کۆمیدیای دانتێ، ڕۆمانی جۆراو جۆری تر...   ">
+                    <div class="book-image">
+                        <img src="images/1 (18).jpg" alt=" ڕۆمانو چیرۆک" onerror="this.style.display='none'; this.parentElement.innerHTML='💊';">
+                    </div>
+                    <div class="book-title"> ڕۆمانو چیرۆک</div>
+                    <div class="book-description">  حەمەدۆگ،سینۆهە، ژنە وەحشیەکان، هەزاروو یەک شەوە،سەدساڵ تەنیایی،ڕشتەی مرواری،شارلۆک هۆڵمز ، ڕۆمانی فارسی، پایزەبرا،کۆمیدیای دانتێ، ڕۆمانی جۆراو جۆری تر...  </div>
+                    <a href="https://drive.google.com/drive/folders/11vv7Kb_upGRy44HwLqqYoIxWNirU00ts" class="download-btn" onclick="openBook('https://drive.google.com/drive/folders/11vv7Kb_upGRy44HwLqqYoIxWNirU00ts')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title=" فێرکاری کار" data-keywords="بازرگانی لەسەدەی بیستویەک، بەریوەبردنی کات، بەڕێوەبەری یەک خولەکی، بیربکەرەوەو دەوڵەمەند بە،داستانی ئیمەو چیرۆکی تۆ،دەوڵەمەنترین پیاوی بابل،ژنی دەوڵەمەند،فێربوونی دوورمان بەفارسی،نامێلکەی ملێونێرێک   ">
+                    <div class="book-image">
+                        <img src="images/profile.jpg" alt=" فێرکاری کار" onerror="this.style.display='none'; this.parentElement.innerHTML='🏥';">
+                    </div>
+                    <div class="book-title"> فێرکاری کار</div>
+                    <div class="book-description">  بازرگانی لەسەدەی بیستویەک، بەریوەبردنی کات، بەڕێوەبەری یەک خولەکی، بیربکەرەوەو دەوڵەمەند بە،داستانی ئیمەو چیرۆکی تۆ،دەوڵەمەنترین پیاوی بابل،ژنی دەوڵەمەند،فێربوونی دوورمان بەفارسی،نامێلکەی ملێونێرێک</div>
+                    <a href="https://drive.google.com/drive/folders/12Jj6DKQa41XlnUMb2xFfLDcSq7VIUPGT" class="download-btn" onclick="openBook(https://drive.google.com/drive/folders/12Jj6DKQa41XlnUMb2xFfLDcSq7VIUPGT')">دابەزاندن</a>
+                </div>
+
+                <div class="book-card" data-title="  Copyriht@ By Erivan 2025" data-keywords=" بۆ پەیوەندی کردن بە خاوەن پرۆژە دەتوانن لە ڕێگەی ئەم لینکانەوە پەیوەندی بکەن  ">
+                    <div class="book-image">
+                        <img src="images/book1.jpg" alt="  Copyriht@ By Erivan 2025" onerror="this.style.display='none'; this.parentElement.innerHTML='🏥';">
+                    </div>
+                    <div class="book-title">  Copyriht@ By Erivan 2025</div>
+                    <div class="book-description"> erevanakb2@gmail.com بۆ پەیوەندی کردن بە خاوەن پرۆژە دەتوانن لە ڕێگەی ئەم لینکانەوە پەیوەندی بکەن</div>
+                    <a href="https://www.facebook.com/share/1CunZj14n4/?mibextid=wwXIfr" class="download-btn" onclick="openBook(https://www.facebook.com/share/1CunZj14n4/?mibextid=wwXIfr')">پەیوەندی کردن</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openBook(driveLink) {
+            // ئەگەر لینکەکە نەدراوە، ئاگاداری بکەرەوە
+            if (driveLink === 'https://drive.google.com/file/d/YOUR_FILE_ID_HERE/view' || !driveLink) {
+                alert('تکایە لینکی گووگڵ درایڤ زیاد بکە');
+                return;
+            }
+            
+            // کردنەوەی لینکەکە لە تابێکی نوێ
+            window.open(driveLink, '_blank');
+        }
+
+        // فەنکشەنی گۆڕینی دۆخ
+        let currentTheme = 'default';
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            if (currentTheme === 'default') {
+                body.className = 'dark-mode';
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'دۆخی ڕۆژ';
+                currentTheme = 'dark';
+            } else if (currentTheme === 'dark') {
+                body.className = 'light-mode';
+                themeIcon.textContent = '🎨';
+                themeText.textContent = 'ڕەنگی ئاسایی';
+                currentTheme = 'light';
+            } else {
+                body.className = '';
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'دۆخی شەو';
+                currentTheme = 'default';
+            }
+            // پاشەکەوتکردنی هەڵبژاردەکە
+            localStorage.setItem('theme', currentTheme);
+        }
+        // بارکردنی دۆخی پاشەکەوتکراو
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme && savedTheme !== 'default') {
+                for (let i = 0; i < (savedTheme === 'dark' ? 1 : 2); i++) {
+                    toggleTheme();
+                }
+            }
+        });
+        // فەنکشەنی گەڕان
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                const books = category.querySelectorAll('.book-card');
+                let hasVisibleBook = false;
+                
+                books.forEach(book => {
+                    const title = book.getAttribute('data-title').toLowerCase();
+                    const description = book.querySelector('.book-description').textContent.toLowerCase();
+                    const keywords = book.getAttribute('data-keywords') ? book.getAttribute('data-keywords').toLowerCase() : '';
+
+                    
+                    if (title.includes(searchTerm)  description.includes(searchTerm)  keywords.includes(searchTerm)) {
+                        book.style.display = 'block';
+                        hasVisibleBook = true;
+                    } else {
+                        book.style.display = 'none';
+                    }
+                });
+
+                
+                // شاردنەوەی بەشەکە ئەگەر هیچ کتێبێکی تێدا نییە
+                if (hasVisibleBook || searchTerm === '') {
+                    category.style.display = 'block';
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+        });
+
+        // ئەفێکتی لەدایکبوون
+        window.addEventListener('load', function() {
+            const categories = document.querySelectorAll('.category');
+            categories.forEach((category, index) => {
+                setTimeout(() => {
+                    category.style.opacity = '0';
+                    category.style.transform = 'translateY(30px)';
+                    category.style.transition = 'all 0.6s ease';
+                    
+                setTimeout(() => {
+                    category.style.opacity = '1';
+                    category.style.transform = 'translateY(0)';
+                }, 100);
+                }, index * 100);
+            });
+        });
+
+        // تێکست کۆپی کردن
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // دووبارە کلیک بۆ کتێب
+        document.querySelectorAll('.book-card').forEach(card => {
+            card.addEventListener('dblclick', function() {
+                const downloadBtn = this.querySelector('.download-btn');
+                if (downloadBtn) {
+                    downloadBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
